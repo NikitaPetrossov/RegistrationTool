@@ -1,6 +1,7 @@
 package petrossov.service.controllers;
 
 import com.sun.deploy.net.HttpResponse;
+import org.apache.tomcat.jdbc.pool.DataSource;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,8 +30,12 @@ import petrossov.service.repositories.UsersRepository;
 import petrossov.service.services.RegistrationService;
 
 import javax.servlet.http.HttpServletResponse;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+
+import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
@@ -41,15 +46,15 @@ public class CrudControllerIT {
     private RegistrationService registrationService;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private UsersRepository usersRepository;
+    @Autowired
+    private DataSource dataSource;
 
     private static Logger logger  = LoggerFactory.getLogger(CrudController.class);
 
-    private static User user;
-
-    @Before
-    public void createUser(){
-        user = User.builder()
-                .id(1000)
+    private static User user =  User.builder()
+            .id(1000)
                 .lastName("LastName")
                 .name("Name")
                 .hashPassword("password")
@@ -58,41 +63,29 @@ public class CrudControllerIT {
                 .role(Role.USER)
                 .state(State.ACTIVE)
                 .build();
-        logger.info("Test create user");
-    }
 
     @Test
-    public void getUsers() {
+    public void isListOfUsersNoEmpty() {
         List<User> users = registrationService.findAll();
         logger.info("Test show All users: "+ Arrays.toString(users.toArray()));
+        assertNotNull(users);
+    }
+    @Test
+    public void dBConnection() throws SQLException {
+        logger.info("Connection: " + dataSource.getConnection());
+        assert(dataSource.getConnection()!= null);
     }
 
-    @Test
-    public void deleteUser() {
-        registrationService.remove(user);
-        logger.info("Test delete userForDelete");
-
-    }
 
     @Test
-    public void findOneUser() {
-         registrationService.findOneById(user.getId());
-        logger.info("Test show one user " + user.toString());
-
-    }
-
-    @Test
-    public void updateUser() {
-
-        registrationService.findOneById(user.getId());
-        user.setLogin(String.valueOf(Math.random()*100));
+    public void isSaveHashPasswordWhileUpdateUser() {
         String hashPassword =  passwordEncoder.encode(String.valueOf(Math.random()*100));
         user.setHashPassword(hashPassword);
+        registrationService.update(user);
         logger.info("Test update user " + user.toString());
+        User userFromDB =usersRepository.findOneByLogin("login").get();
+        assertEquals(userFromDB.getHashPassword(), hashPassword);
+       registrationService.remove(userFromDB);
     }
-    @After
-    public void delete(){
-        registrationService.remove(user);
-        logger.info("Test delete user");
-    }
+
 }

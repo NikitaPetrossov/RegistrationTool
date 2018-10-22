@@ -162,7 +162,6 @@ function updateUser(){
 
 
 </p>
-<script src="/static.js/loadData.js" type="text/javascript" charset="utf-8"></script>
 
 </body>
 </html>
