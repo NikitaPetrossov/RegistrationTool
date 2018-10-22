@@ -19,6 +19,8 @@ import petrossov.service.models.User;
 import petrossov.service.repositories.UsersRepository;
 import petrossov.service.services.RegistrationService;
 
+import java.util.Optional;
+
 import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
@@ -27,6 +29,8 @@ public class RegistrationControllerIT {
 
     @Autowired
     private RegistrationService registrationService;
+    @Autowired
+    private UsersRepository usersRepository;
 
     private static Logger logger  = LoggerFactory.getLogger(CrudController.class);
 
@@ -49,6 +53,9 @@ public class RegistrationControllerIT {
     public void registration() {
         registrationService.registration(user);
         logger.info("Registration user is completed in test");
+        Optional<User> userOptional = usersRepository.findOneByLogin("login");
+        User userFromDB = userOptional.get();
+        assertEquals(userFromDB, user);
     }
     @After
     public void delete(){
