@@ -39,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticated();*/
 
         http.authorizeRequests()
-                .antMatchers("/findUsers/**").hasAuthority("ADMIN")
+                .antMatchers("/crud/**").hasAuthority("ADMIN")
                 .antMatchers("/registration/**").permitAll()
                 .antMatchers("/deleteUser/**").permitAll()
                 .antMatchers("/").permitAll()
