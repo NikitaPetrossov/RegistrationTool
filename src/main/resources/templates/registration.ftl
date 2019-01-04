@@ -53,32 +53,6 @@
 
 </form>
 
-<#--
-<table >
-
-    <thead>
-    <th >Family Name</th>
-    <th>First Name</th>
-    <th>Password</th>
-    <th>Date of birth</th>
-    </thead>
-
-    <tbody>
-    &lt;#&ndash;<c:forEach   var="user" items="${usersFromServer}">&ndash;&gt;
-    <#list usersFromServer as user>
-        <tr>
-            <td> ${user.lastName}   </td>
-            <td> ${user.name}   </td>
-            <td>${user.password}   </td>
-            <td> ${user.date}    </td>
-
-        </tr>
-    </#list>
-    &lt;#&ndash;</c:forEach>&ndash;&gt;
-    </tbody>
-
-</table>
--->
 
 
 
