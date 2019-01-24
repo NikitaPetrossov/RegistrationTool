@@ -8,7 +8,7 @@ import petrossov.service.models.User;
 
 import java.util.Collection;
 import java.util.Collections;
-//класс адаптер  - соединяет юзера из модели и спрингсекьюрити
+//класс адаптер  - адаптирует нашу модель к модели поведения Spring Security
 public class UserDetailsImpl implements UserDetails {
     private User user;
 
@@ -19,7 +19,7 @@ public class UserDetailsImpl implements UserDetails {
     public UserDetailsImpl(User user) {
         this.user = user;
     }
-
+//сообщаем springу какие права есть у пользователя
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
        String userRole = user.getRole().name();
