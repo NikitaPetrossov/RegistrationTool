@@ -62,7 +62,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         tokenRepository.setDataSource(dataSource);
         return tokenRepository;
     }
-
+//сообщаем Springу каким сервисоом пользоваться для загрузки пользователя по логину
+    //и какой PasswordEncoder используется для шифрования пароля
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService)
